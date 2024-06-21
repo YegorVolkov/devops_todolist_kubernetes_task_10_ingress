@@ -48,6 +48,35 @@ Create a kubernetes manifest for a pod which will containa ToDo app container:
 
 --- 
 
-we can see our `ingress-service` running
+- Following is validation of the running ingress-service
+
+    `kubectl get ingress -n todoapp`
+
+    ```
+    NAME              CLASS    HOSTS   ADDRESS     PORTS   AGE
+    ingress-service   <none>   *       localhost   80      10h
+    ```
+
+    `kubectl describe ingress ingress-service -n todoapp`
+
+    ```
+    Name:             ingress-service
+    Labels:           <none>
+    Namespace:        todoapp
+    Address:          localhost
+    Ingress Class:    <none>
+    Default backend:  <default>
+    Rules:
+      Host        Path  Backends
+      ----        ----  --------
+      *
+                  /   todoapp-service:80 (10.244.1.4:8080,10.244.2.3:8080)
+    Annotations:  nginx.ingress.kubernetes.io/rewrite-target: /
+    Events:
+      Type    Reason  Age                From                      Message
+      ----    ------  ----               ----                      -------
+      Normal  Sync    5m19s              nginx-ingress-controller  Scheduled for sync
+      Normal  Sync    71s (x2 over 72s)  nginx-ingress-controller  Scheduled for sync
+    ```
 
 we have full access to our app not through `nodeport`, but through `ingress-service` on `localhost/`
